@@ -37,7 +37,7 @@ T3-ModTools is intended for personal modding, preservation, and interoperability
 
 This project is experimental. Some assets or workflows may require target-specific testing, and adding entirely new game content can require configuration or engine research beyond ordinary file replacement.
 
-This README describes the role of the application only. For installation instructions and modding tutorials, see the included [T3 Modding Guide]([Documentation/T3-Modding-Guide.pdf](https://github.com/JacoboGutierrez/T3-ModTools/blob/main/T3-ModTools/Documentation/T3-Modding-Guide.pdf).
+This README describes the role of the application only. For installation instructions and modding tutorials, see the included [T3 Modding Guide](https://github.com/JacoboGutierrez/T3-ModTools/blob/main/T3-ModTools/Documentation/T3-Modding-Guide.pdf).
 
 The source code is distributed under the MIT License. This license applies to T3-ModTools itself, not to extracted game assets. Game assets remain the property of their respective rights holders.
 
