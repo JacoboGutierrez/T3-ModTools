@@ -3,7 +3,7 @@
 **Version 0.6.0**  
 Experimental asset extraction, conversion, and mod management tool for **Terminator 3: War of the Machines (PC)**.<br>
 +      System.Console.WriteLine("Note: Mods that modify the Modded Launcher will cause the game to crash the first time the modifying mod is compiled. After the initial crash, a new game instance opens automatically, and the game starts without issues. This will not happen again unless a new mod that modifies the launcher is installed.");
-+  dasda
+<br>
 [Español](#español)
 
 ## What is T3-ModTools?
