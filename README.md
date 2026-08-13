@@ -51,6 +51,11 @@ The source code is distributed under the MIT License. This license applies to T3
 
 **Versión 0.6.0**  
 Herramienta experimental de extracción, conversión y gestión de mods para **Terminator 3: War of the Machines (PC)**.
+<br>
+$\color{yellow}\textsf{Tener en cuenta: Los mods que modifican el Modded Launcher hacen que el juego tenga un crash la primera vez}$
+$\color{yellow}\textsf{que se compila el mod que lo modifica. Luego del primer crash se abre una instancia del juego nueva automaticamente e inicia el juego}$
+$\color{yellow}\textsf{sin problema. No volvera a suceder a menos que un nuevo mod que modifica el launcher sea instalado.}$
+<br>
 
 ## ¿Qué es T3-ModTools?
 
