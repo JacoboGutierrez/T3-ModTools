@@ -3,7 +3,9 @@
 **Version 0.6.0**  
 Experimental asset extraction, conversion, and mod management tool for **Terminator 3: War of the Machines (PC)**.
 <br>
-$\color{#ff0000}\textsf{Note: Mods that modify the Modded Launcher will cause the game to crash the first time the modifying mod is compiled. After the initial crash, a new game instance opens automatically, and the game starts without issues. This will not happen again unless a new mod that modifies the launcher is installed. "ff0000"}$
+$\color{#ff0000}\textsf{Note: Mods that modify the Modded Launcher will cause the game to crash the first time the modifying mod is compiled."ff0000"}$
+$\color{#ff0000}\textsf{After the initial crash, a new game instance opens automatically, and the game starts without issues."ff0000"}$
+$\color{#ff0000}\textsf{This will not happen again unless a new mod that modifies the launcher is installed."ff0000"}$
 <br>
 [Español](#español)
 
