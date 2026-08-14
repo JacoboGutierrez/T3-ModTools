@@ -1,0 +1,56 @@
+T3-ModTools executable patches
+==============================
+
+Optional per-mod path:
+
+  <mod>/patches/executable.json
+
+For flat mod folders, <mod>/executable.json is also accepted as a fallback.
+
+Version 1 schema:
+
+{
+  "format_version": 1,
+  "target": "T3.exe",
+  "patches": [
+    {
+      "id": "my_patch",
+      "description": "What this patch changes",
+      "type": "aob_replace",
+      "section": ".text",
+      "pattern": "AA BB ?? DD",
+      "replacement": "11 22 ?? 44",
+      "expected_matches": 1
+    }
+  ]
+}
+
+For code or data injection away from a unique anchor, use aob_write:
+
+{
+  "id": "my_injection",
+  "description": "Write validated bytes relative to a unique signature",
+  "type": "aob_write",
+  "section": ".text",
+  "pattern": "AA BB CC DD",
+  "write_offset": "0x20",
+  "expected_fill": "00",
+  "replacement": "11 22 33 44",
+  "expected_matches": 1
+}
+
+Rules:
+- Patterns are searched against the original T3.exe, never a previously modded executable.
+- ?? in pattern matches any byte.
+- ?? in replacement preserves the original byte.
+- For aob_replace, pattern and replacement must have the same length.
+- For aob_write, write_offset is relative to the unique pattern match; expected and
+  replacement must have the same length, and the destination must remain in section.
+- expected_fill may replace expected when every original destination byte must have the
+  same value; it expands to the replacement length.
+- aob_write validates expected against the original T3.exe before writing.
+- Version 1 requires expected_matches = 1.
+- Section may be .text, .rdata, .data, .tls, .data1, .rsrc, or all.
+- Conflicting writes from enabled mods stop the build. Identical writes may coexist.
+- Build Mods + Modded EXE recreates both Mods.Cod and T3_Modded.exe automatically.
+- T3.exe is never overwritten.
