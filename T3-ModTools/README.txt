@@ -185,10 +185,10 @@ The Blender plugin folder contains:
 
 - T3_Blender_ANM_Importer.py
 - T3_Blender_ANM_Exporter.py
+- T3_Blender_LOD_Exporter.py
+- T3_Blender_LOD_Importer.py
+- T3_Blender_Menu_Model_SCA_Exporter.py
 - T3_Blender_SCA_Exporter.py
-- ANIMATION_IMPORT_README.txt
-- ANIMATION_EXPORT_README.txt
-- SCA_EXPORT_README.txt
 
 T3_Blender_SCA_Exporter.py is the new experimental Blender-to-SCA exporter. A Blender plugin
 is the most practical way to collect edited mesh geometry, UV maps, material texture names,
