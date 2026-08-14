@@ -2,8 +2,16 @@
   <img
     src="https://github.com/JacoboGutierrez/JacoboGutierrez/blob/main/t3-thumbnail-01.png?raw=true"
     alt="T3 Mod Tools Banner"
-    style="pointer-events: none;"
   />
+</p>
+
+<p align="center">
+  <picture>
+    <img
+      src="[https://github.com](https://github.com/JacoboGutierrez/JacoboGutierrez/blob/main/t3-thumbnail-01.png"
+      alt="T3 Mod Tools Banner"
+    />
+  </picture>
 </p>
 
 # T3-ModTools
