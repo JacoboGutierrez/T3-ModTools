@@ -8,7 +8,7 @@
 <p align="center">
   <picture>
     <img
-      src="[https://github.com](https://github.com/JacoboGutierrez/JacoboGutierrez/blob/main/t3-thumbnail-01.png"
+      src="[https://github.com](https://github.com/JacoboGutierrez/JacoboGutierrez/blob/main/t3-thumbnail-01.png?raw=true"
       alt="T3 Mod Tools Banner"
     />
   </picture>
