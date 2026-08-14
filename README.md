@@ -1,6 +1,6 @@
 # T3-ModTools
 
-**Version 0.6.0**  
+**Version 0.6.1**  
 Experimental asset extraction, conversion, and mod management tool for **Terminator 3: War of the Machines (PC)**.
 <br>
 $\color{yellow}\textsf{Note: Mods that modify the Modded Launcher will cause the game to crash the first time the modifying mod is compiled.}$
@@ -49,7 +49,7 @@ The source code is distributed under the MIT License. This license applies to T3
 
 # Español
 
-**Versión 0.6.0**  
+**Versión 0.6.1**  
 Herramienta experimental de extracción, conversión y gestión de mods para **Terminator 3: War of the Machines (PC)**.
 <br>
 $\color{yellow}\textsf{Tener en cuenta: Los mods que modifican el Modded Launcher hacen que el juego tenga un crash la primera vez}$
