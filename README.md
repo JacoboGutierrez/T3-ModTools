@@ -1,3 +1,10 @@
+<p align="center">
+  <img
+    src="https://github.com/JacoboGutierrez/JacoboGutierrez/blob/main/t3-thumbnail.png?raw=true"
+    alt="T3 Mod Tools Banner"
+  />
+</p>
+
 # T3-ModTools
 
 **Version 0.6.1**  
