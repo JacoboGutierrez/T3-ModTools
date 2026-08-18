@@ -1,0 +1,38 @@
+T3-MODTOOLS 0.6.1.1 TEST REPORT
+================================
+
+AUTOMATED TESTS
+---------------
+
+- All main Python modules and Blender add-on source files passed Python syntax compilation.
+- All ten Python unit tests passed.
+- The command-line entry point reports T3-ModTools 0.6.1.1 correctly.
+- Localization tests confirm that English, Spanish, Russian, and Portuguese expose the
+  same interface keys and preserve every dynamic message placeholder.
+- Duplicate-file regression coverage confirms that the enabled mod highest in the visible
+  load order wins while load_order.json preserves that top-to-bottom order.
+- A real 32-bit T3.exe from the supplied game archive was used for loader/patch testing.
+- A mod containing only patches/executable.json was discovered with zero files and one EXE patch.
+- The build created a valid empty ZIP-compatible Mods.Cod for the executable-only mod.
+- T3_Modded.exe was rebuilt from the pristine original T3.exe.
+- The common loader still injects mods/Mods.Cod before Language.cod, Patch116.Cod, and Game.Cod.
+- A unique AOB signature in the .data section was found exactly once and safely applied.
+- loader_manifest.json recorded the executable patch ID, mod ID, file offset, and size.
+- The original T3.exe SHA-256 remained unchanged after the complete build.
+- Two incompatible writes to the same executable byte were detected as a conflict.
+- When the conflicting build failed, the previously valid Mods.Cod and T3_Modded.exe pair was restored.
+- Settings support the new T3-ModTools location while retaining migration from the former T3 Asset Tool path.
+
+REAL T3.EXE USED BY THE TEST
+----------------------------
+
+SHA-256:
+52f68d5df4912aba662f0371a06ae0b1ec447ef4b7338460224b20904eb0f061
+
+LIMITATIONS
+-----------
+
+- Launching the Windows game executable is outside the automated test suite.
+- The version 1 executable patch format currently supports safe same-length AOB replacements only.
+- More advanced hook/code-cave patch types will be needed for mods that inject new conditional game logic.
+- The T-900 Heavy blue-vision conditional patch is not bundled yet; 0.6.1.1 provides the infrastructure it will use.

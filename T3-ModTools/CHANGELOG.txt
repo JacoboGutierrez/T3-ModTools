@@ -1,0 +1,147 @@
+T3-MODTOOLS CHANGELOG
+=====================================
+
+0.6.1.1
+-------
+
+- Added complete Russian and Portuguese translations for Asset Extraction and Modding modes.
+- Added Russian and Portuguese to the persistent language selector.
+- Added automated localization checks for supported languages, translation keys, and
+  dynamic message placeholders.
+
+
+0.6.1
+-----
+
+- Changed mod conflict resolution so the enabled mod highest in the visible load order
+  has priority when multiple projects provide the same internal file.
+- Kept load_order.json in the same top-to-bottom order shown by the interface.
+- Clarified the priority direction in the English and Spanish interface and documentation.
+
+
+0.6.0
+-----
+
+- Renamed the application to T3-ModTools.
+- Renamed the Windows launchers to T3-ModTools.bat and T3-ModTools.vbs.
+- Added automatic migration support for the previous T3 Asset Tool settings location.
+- Added patches/executable.json support to each mod project.
+- Added safe AOB executable patch manifests with wildcards and expected-match validation.
+- Added executable patch conflict detection; incompatible overlapping writes stop the build.
+- Changed the main mod build action to rebuild both Mods.Cod and T3_Modded.exe automatically.
+- T3_Modded.exe is always regenerated from the pristine original T3.exe; T3.exe remains untouched.
+- Added support for executable-only mods by generating a valid empty Mods.Cod when needed.
+- Mod project details now show both packaged file count and executable patch count.
+- Build backups now use unique transaction names so stale or temporarily locked backups
+  cannot block later builds, with rollback also covering failures during backup staging.
+- Mod builds now remove the previous load_order.json and recreate it from the current
+  project order and enabled state, alongside cleaning Mods.Cod and mods/.compiled/.
+
+
+0.5.0.1
+-------
+
+- Added the selectable Menu Models / Modelos del menú category in Asset Extraction mode.
+- Menu Models selects only .sca files under MenuDatas/3DModells/ in Game.cod.
+- Menu models can be copied as raw SCA files with Extract all raw files.
+- Menu models can be converted to OBJ + MTL with the existing geometry conversion option.
+- Converted menu models keep native T3 Y/Z orientation and the global X mirror.
+- Modding mode and the stable v0.5.0 loader logic were not changed.
+
+0.5.0
+-----
+
+- Added a persistent switch between Asset Extraction and Modding modes.
+- Added independent mod projects with mod.json metadata and files/ content folders.
+- Added enable/disable controls and visual load-order management.
+- Added conflict-aware compilation of enabled projects into mods/Mods.Cod.
+- Added build_manifest.json with winning files, conflicts, enabled mods, and package SHA-256.
+- Added a conservative loader installer that creates T3_Modded.exe while leaving T3.exe untouched.
+- Added loading of mods/Mods.Cod before Language.cod, Patch116.Cod, and Game.Cod.
+- Added launching of the compiled modded game from the interface.
+- Added the experimental T3 Blender SCA exporter for static and rigged replacement models.
+- Added the experimental T3 Blender ANM exporter for active Blender Actions.
+- Updated the animation import documentation with the user-tested global Y-axis workflow.
+- Preserved all extraction, OBJ, glTF, UV, material, mirror, and animation-import behavior from 0.4.4.
+
+0.4.4
+-----
+
+- Translated the Spanish UV warning to: Invertir V de UV (No usar con modelos glTF 2.0).
+- Kept the English UV warning as: Flip UV V coordinate (Don't use with glTF 2.0 models).
+- Changed the Z-up labels to: Z-up (only for weapons and effects) / Z-up (solo para armas y efectos).
+- No extraction, conversion, rigging, UV, material, or animation logic was changed.
+
+0.4.3
+-----
+
+- Updated the UV option label to warn that it should not be used with glTF 2.0 models.
+- Made rigged glTF export preserve the source UV V coordinate regardless of the OBJ UV-flip checkbox.
+- Removed the redundant global triangle reversal from mirrored glTF rigs.
+- Relied on the negative determinant of the glTF mirror node to define clockwise mirrored winding as required by glTF 2.0.
+- Added per-triangle winding repair when source triangle order conflicts with stored vertex normals.
+- Explicitly marked rig materials as OPAQUE and single-sided to prevent texture alpha from being interpreted as general transparency.
+- Kept OBJ winding behavior unchanged.
+
+0.4.2
+-----
+
+- Preserved rigged-model UV0 explicitly as the glTF TEXCOORD_0 attribute.
+- Added automatic DDS/TGA to PNG conversion for rigged glTF base textures.
+- Added built-in standard-library decoding for DDS DXT1, DXT3, and DXT5 textures.
+- Added built-in decoding for common uncompressed and RLE TGA textures.
+- Connected generated PNG images to glTF PBR materials through baseColorTexture and texCoord 0.
+- Retained the original DDS/TGA files beside the generated PNG copies.
+- Added UV-count and unsupported-texture warnings instead of silently omitting data.
+- Added optional Pillow acceleration when Pillow is already installed; no third-party package is required.
+
+0.4.1
+-----
+
+- Renamed the UI option to Export Rigs (glTF 2.0) / Exportar Rigs (glTF 2.0).
+- Expanded rig detection from characters to compatible characters, vehicles, and weapons.
+- Added rig export filtering based on the selected asset categories.
+- Added optional Z-up parent transforms for rigged weapons while characters and vehicles retain native orientation.
+- Added support for keeping Blender importer files inside the Blender plugin folder.
+- Detected 53 compatible rigs in the tested Game.cod: 24 characters and 29 weapons.
+- No compatible vehicle rigs were present in the tested archive, but vehicle rig detection is enabled.
+
+0.4.0
+-----
+
+- Added the Animations category.
+- Added extraction of all original .anm files.
+- Added t3_animation_manifest.json with animation name, FPS, duration, frame count, and joint count.
+- Added the experimental T3 Blender ANM importer.
+- Added experimental rigged character export to glTF 2.0.
+- Added cBone hierarchy parsing.
+- Added Weightmap skin-weight parsing.
+- Added inverse bind matrices and glTF skin definitions.
+- Preserved the global X mirror through a T3_Global_Mirror_X parent node.
+- Preserved native T3 orientation for rigged characters without a fixed X-axis rotation.
+- Added English documentation for the rigged-model and animation workflow.
+- Kept the launcher names T3_ASSET_TOOL.bat and T3_ASSET_TOOL.vbs.
+- Preserved remembered Game.cod, output-folder, and language settings.
+
+0.3.0
+-----
+
+- Added remembered input and output paths.
+- Added English and Spanish UI languages with persistent selection.
+- Made English the first-launch default.
+- Changed the Game.cod field label.
+- Converted the main README to README.txt in the launcher patch.
+
+0.2.1
+-----
+
+- Removed the fixed X-axis rotation from characters, vehicles, and maps.
+- Kept the global X mirror and winding correction.
+
+0.2.0
+-----
+
+- Added effects extraction.
+- Added audio extraction.
+- Added global X mirroring.
+- Added silent VBS launcher support.
