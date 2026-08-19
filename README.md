@@ -1,6 +1,6 @@
 <p align="center">
   <img
-    src="https://github.com/JacoboGutierrez/JacoboGutierrez/blob/main/t3-thumbnail-03.png?raw=true"
+    src="https://github.com/JacoboGutierrez/JacoboGutierrez/blob/main/t3-thumbnail-04.png?raw=true"
     alt="T3 Mod Tools Banner"
   />
 </p>
