@@ -14,7 +14,6 @@ $\color{yellow}\textsf{Note: Mods that modify the Modded Launcher will cause the
 $\color{yellow}\textsf{After the initial crash, a new game instance opens automatically, and the game starts without issues.}$
 $\color{yellow}\textsf{This will not happen again unless a new mod that modifies the launcher is installed.}$
 <br>
-<p><span style="color: red;"><strong>Note:</strong> This Optic only fits the Walther PDP Optic Plate Mounting System (2.0)</span><br />
 [Español](#español)
 
 ## What is T3-ModTools?
