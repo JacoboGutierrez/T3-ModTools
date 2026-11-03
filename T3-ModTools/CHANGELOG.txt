@@ -1,6 +1,18 @@
 T3-MODTOOLS CHANGELOG
 =====================================
 
+0.6.12 maintenance - 2026-11-03
+------------------------------
+- Fix Generate mod pack validation for enabled animation mods: analyze the staged
+  pack against read-only installed COD archives and pass the compatibility plan
+  to the isolated loader validator, including any automatically required AI target.
+- Migrate exact verified legacy ANM patches before renaming pack patch IDs, avoiding
+  obsolete writes conflicting with current automatic animation/SFX support.
+- Preserve the resolved NPC animation variant configuration in the pack and record
+  legacy migration and configuration provenance in MERGE_REPORT.json.
+- Add regression coverage for archive context, automatic AI inputs, legacy safety,
+  animation configuration, priority, and failed-publication isolation.
+
 0.6.12 - 2026-10-28
 ------------------
 - Recognize the private Heavy WM32 dual running role as a WM20 TPS channel

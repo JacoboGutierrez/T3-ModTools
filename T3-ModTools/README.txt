@@ -221,7 +221,7 @@ GENERATING A MOD PACK
 -------------------
 
 Generate mod pack, directly below Create mod, combines every currently enabled project
-into a new standalone mod project. Enter a pack name; the tool copies files/ content
+into a new combined mod project. Enter a pack name; the tool copies files/ content
 and combines executable manifests, preserving the visible top-first priority for
 duplicate asset paths. Disabled projects are excluded.
 
@@ -230,11 +230,22 @@ Their generated patches are included as a static patches/executable.json, with e
 T3.exe or Ai.Dll target preserved. Patch IDs are made unique and MERGE_REPORT.json maps
 them back to the source mods. Executable patches are validated together on temporary
 copies of the pristine binaries. Incompatible writes stop pack creation.
+Animation compatibility is analyzed against the installed original COD archives,
+read-only; those large archives do not need to be copied into the temporary folder.
+The validation includes automatically generated animation patches and copies the
+original AI DLL when those patches need it, even without an explicit AI manifest.
+
+Known legacy ANM patches are verified by their exact identity/digest before their
+IDs can be renamed. They are replaced by current automatic compiler support, just
+as in a normal build, and recorded in MERGE_REPORT.json. Modified legacy patches
+still fail validation. Resolved animation alternatives are retained in a combined
+anm_variants.json so compiling the pack keeps the original animation behavior.
 
 The new project includes mod.json, files/, optional patches/executable.json, an English
 README.md, and MERGE_REPORT.json with source order, file hashes, and resolved conflicts.
-Only game assets and executable patches are merged; development scripts and other
-source-root files are not copied. Asset contents and existing patch descriptions retain
+Only game assets, executable patches and the supported animation variant configuration
+are merged; development scripts and other source-root files are not copied.
+Asset contents and existing patch descriptions retain
 their original text; this command does not translate third-party content.
 
 After success, the pack is enabled and the source mods are disabled with their folders
@@ -244,6 +255,10 @@ leave no partial pack and preserve the previous load order and compiled game out
 Use Build Mods + Modded EXE to compile the new pack. Generating a pack does not rebuild
 Mods.Cod, T3_Modded.exe, or A2.Dll. The pack is a snapshot: create another pack to include
 later edits to the source mods.
+Patches that load an external runtime DLL directly from a source mod directory
+still require that file at its original path. The pack does not rewrite embedded
+external paths or bundle arbitrary native DLLs; retain those source folders when
+using such features. This is separate from ordinary files/ archive resources.
 
 BUILDING MODS + MODDED EXE
 --------------------------

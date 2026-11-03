@@ -703,11 +703,13 @@ class ModManager:
         projects: Optional[list[ModProject]] = None,
         author: str = "",
     ) -> ModPackResult:
-        """Freeze enabled projects into one standalone, editable mod project.
+        """Freeze enabled projects into one editable mod snapshot.
 
         Runtime generators are synchronized before taking the snapshot. Their output is
         included as a static manifest, not as scripts that could overwrite the merged
-        patches later. Validate in an isolated game folder before publishing the pack.
+        patches later. Preserve compiler animation configuration and validate in an
+        isolated game folder before publishing the pack. External runtime paths
+        embedded in third-party patches are not relocated by this operation.
         """
         if not name.strip():
             raise ValueError("Enter a name for the mod pack.")
@@ -740,11 +742,25 @@ class ModManager:
 
         self.sync_runtime_patches(enabled)
         merged, conflicts = self._collect_pack_files(enabled)
+        # Preserve compiler inputs that live outside files/. In particular NPC
+        # variants are configuration, not frozen executable patches. Resolve
+        # them with the same priority/profile checks as a normal source build.
+        source_anm_plan = analyze_anm_compatibility(self.game_folder, enabled)
         patches: list[dict] = []
         patch_sources: list[dict] = []
+        migrated_patches: list[dict] = []
         for source in enabled:
             for patch in self._read_patch_manifest(source):
                 original_id = str(patch.get("id") or "patch")
+                # Normal builds replace these exact, digest-verified historical
+                # patches with automatic ANM support. Renaming them first hides
+                # their identity and reintroduces obsolete/conflicting writes.
+                # Modified legacy patches must still fail this safety check.
+                if t3_anm_runtime.is_legacy_patch(patch):
+                    migrated_patches.append({"source_mod": source.id,
+                                             "source_patch": original_id,
+                                             "target": patch["target"]})
+                    continue
                 # The numeric prefix keeps IDs unique even after the 64-character limit.
                 pack_id = safe_id(f"p{len(patches) + 1}_{source.id}_{original_id}")
                 patches.append({**patch, "id": pack_id})
@@ -780,6 +796,13 @@ class ModManager:
             (folder / MOD_METADATA_FILENAME).write_text(
                 json.dumps(metadata, indent=2, ensure_ascii=False) + "\n", encoding="utf-8",
             )
+            if source_anm_plan.variants:
+                (folder / "anm_variants.json").write_text(json.dumps({
+                    "format_version": 1,
+                    "library": "ca/casts/t900s/tps/anim.lib",
+                    "pairs": [{"base": base, "alternative": alternative}
+                              for base, alternative in source_anm_plan.variants],
+                }, indent=2) + "\n", encoding="utf-8")
             pack = ModProject(
                 mod_id, metadata["name"], folder, metadata["author"], "1.0.0",
                 metadata["description"], True, len(merged), len(patches),
@@ -789,6 +812,10 @@ class ModManager:
                     "format_version": EXEC_PATCH_FORMAT_VERSION,
                     "target": "T3.exe", "patches": patches,
                 }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+            # Automatic animation patches also need validation even when there
+            # is no explicit executable manifest left after legacy migration.
+            if (patches or source_anm_plan.local_bind or source_anm_plan.rules
+                    or source_anm_plan.variants or source_anm_plan.navigation):
                 self._validate_pack_patches(pack, stage / "validation")
 
             report = {
@@ -802,6 +829,9 @@ class ModManager:
                 "asset_files": len(merged),
                 "asset_overlaps": [conflict.__dict__ for conflict in conflicts],
                 "executable_patches": len(patches), "patch_sources": patch_sources,
+                "replaced_legacy_patches": migrated_patches,
+                "animation_variant_pairs": len(source_anm_plan.variants),
+                "animation_variant_sources": source_anm_plan.report.get("variant_configuration_inputs", []),
                 "files": file_records,
             }
             (folder / "MERGE_REPORT.json").write_text(
@@ -819,14 +849,20 @@ class ModManager:
                 "MERGE_REPORT.json records sources, file hashes, resolved overlaps, "
                 "and the original IDs of executable patches.\n\n"
                 "## Using this pack\n\n"
-                "This is a standalone snapshot. Its source mods are disabled after creation "
+                "This is a static snapshot. Its source mods are disabled after creation "
                 "and their folders are retained. Use Build Mods + Modded EXE to compile it. "
                 "Creating a pack does not rebuild the currently installed game outputs.\n\n"
                 "Executable patches are validated together against the original binaries; "
                 "incompatible writes abort creation. Runtime generators are synchronized "
                 "before the snapshot; the pack includes their static patch output. "
+                "Verified legacy ANM patches are replaced by the compiler's automatic "
+                "animation support, not copied as obsolete writes. Animation variant "
+                "configuration is preserved in anm_variants.json when present. "
                 "Create a new pack to include future source updates. Development scripts "
-                "and other files outside files/ are not bundled, except the patch manifest.\n",
+                "and other files outside files/ are not bundled, except the patch manifest "
+                "and animation variant configuration. Runtime files loaded directly from "
+                "a source mod folder still require that folder at its original location; "
+                "the snapshot does not relocate external DLLs embedded in patches.\n",
                 encoding="utf-8",
             )
             # Publish only after all copies and patch validation have succeeded. The
@@ -890,15 +926,22 @@ class ModManager:
 
     def _validate_pack_patches(self, pack: ModProject, game_folder: Path) -> None:
         """Reuse full loader conflict/signature checks, writing only temporary outputs."""
+        # Analyze the staged pack against the installed read-only archives. The
+        # isolated validation folder deliberately contains only binary copies,
+        # not another copy of the large COD archives. Pass the resulting plan to
+        # the loader so it does not try to analyze that incomplete game folder.
+        anm_plan = analyze_anm_compatibility(self.game_folder, [pack])
         game_folder.mkdir()
         targets = {"T3.exe"} | {patch["target"] for patch in self._read_patch_manifest(pack)}
+        if anm_plan.navigation or anm_plan.variants:
+            targets.add(AI_DLL_FILENAME)
         for target in targets:
             original = self.game_folder / target
             if not original.is_file():
                 raise FileNotFoundError(f"{target} was not found in {self.game_folder}")
             shutil.copy2(original, game_folder / target)
         validator = ModManager(game_folder, log=self.log, language=self.language)
-        validator.install_loader([pack], synchronize_runtime=False)
+        validator.install_loader([pack], synchronize_runtime=False, anm_plan=anm_plan)
 
     @build_cache.scan_operation
     def build(self, projects: Optional[list[ModProject]] = None, *, generated_files=None) -> BuildResult:
