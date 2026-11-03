@@ -1,0 +1,151 @@
+T3-MODTOOLS 0.6.5 TEST REPORT
+================================
+
+LOADER HOTFIX EVIDENCE
+----------------------
+
+- The user-reported crash occurred at EIP 0x0044D8C1 during a menu lookup.
+- A live empty-string sentinel at VA 0x00688040 instead contained DER_V2, bytes from the
+  enlarged loader path/marker in the initial 0.6.5 executable. This corrupted the lookup
+  and caused the observed null-pointer failure.
+- The correction allocates loader code and path data in an appended .t3ldr RX section.
+  Original sections are preserved except for the six-byte loader hook and mod patches;
+  the PE headers are updated to describe the added section.
+- Recognized legacy loaders are verified against their bytes and manifest fingerprints,
+  their original storage is restored, and the new section is installed while preserving
+  existing mod patches. Launch requires this corrected loader.
+- The game has not been launched as part of this hotfix verification.
+
+CURRENT HOTFIX VALIDATION
+-------------------------
+
+- All 70 automated tests passed in 28.826 seconds, including eight loader regressions
+  and both hidden Tk GUI tests.
+- All 24 Python source files passed in-memory syntax compilation.
+- Bounded execution of the actual menu branch reproduces the old crash and verifies the
+  corrected branch. Loader trampoline tests verify actual call arguments and stack behavior.
+- The T-900 runtime generator passed validation without --write.
+- The installation was regenerated with build_all using the five currently enabled mods
+  in their existing top-to-bottom order: t900_heavy_assault, t3_enhanced_t_units,
+  accurate_weapons, t3_enhanced_sfx, t3_original_soundtracks.
+- The load-order state remained byte-for-byte identical. All 75 executable patch payloads
+  were identical between the previous build and the corrected build. A2.Dll also remained
+  byte-for-byte identical.
+- Original T3.exe, Ai.Dll, Game.cod, and Patch116.Cod remained unchanged.
+- The current Mods.Cod contains 226 files and retained exactly the same SHA-256 before
+  and after regeneration:
+  5f06c3e7cf7ec80fb0ba0eb843d897c5996eb41543303f728016b890ac6a6e0f
+- The corrected T3_Modded.exe is 2,707,456 bytes, with SHA-256:
+  85eead8ee6d15440da0a32164b42e9edda3c05df5965bbd7de81339a74806700
+- Its .t3ldr section starts at raw file offset 0x294000 and RVA 0xDBA000. The original
+  sentinel storage from raw offset 0x288020 up to, but excluding, 0x288048 exactly matches
+  the pristine executable.
+- The previous package, generated executable, A2.Dll, load-order state, compiled reports,
+  crash report, and debug.log were retained in:
+  T3/modtools_data/repair_backup/cbc0e7ac143a4f4f8f311081083c4f66/
+- The game was not launched. These results verify the reproduced branch and generated
+  binary changes; a full gameplay session remains outside this automated verification.
+
+PRE-HOTFIX AUTOMATED BASELINE (SUPERSEDED)
+-----------------------------------------
+
+- All main Python modules and Blender add-on source files passed Python syntax compilation.
+- All 62 automated tests passed in 47.123 seconds, including both hidden Tk GUI tests.
+- That suite did not detect the live sentinel overwritten by loader string growth. Its
+  passing result did not establish runtime safety of the original 0.6.5 loader placement.
+- The application and command-line --help report version 0.6.5.
+- The GUI test invokes Generate mod pack below Create mod, waits for its background worker,
+  and verifies that the new pack is enabled and its source project is disabled.
+- Mod pack tests cover enabled-only selection, top-first ownership, directory casing,
+  file/directory conflicts, unique bounded IDs, copy failures, and load-order rollback.
+- Runtime-generated packs preserve per-patch targets and source IDs in the merge report.
+  Disabled generators are excluded; generator errors publish no pack.
+- Real-binary pack tests reject conflicting writes and allow identical overlapping writes.
+- A pack created from isolated copies of the five Enhanced Overhaul source mods produces
+  the same archive contents, T3_Modded.exe, and A2.Dll as building those mods individually.
+  Pack creation itself preserves existing compiled outputs and original binaries.
+- Localization tests confirm that English, Spanish, Russian, and Portuguese expose the
+  same interface keys and preserve every dynamic message placeholder.
+- Console messages use the selected language. Runtime-generator output and technical
+  diagnostics are preserved in UTF-8 log files, with localized console status messages.
+- Runtime generators receive PYTHONIOENCODING=utf-8; multilingual raw-output capture
+  passes its regression check.
+- Storage migration tests cover old state/output locations, a locked generated executable,
+  and a mismatched executable fingerprint requiring a full build before launch.
+- Additional storage tests cover idempotence, authoritative existing destinations,
+  separate custom-folder load orders, and legacy reports replacing an empty placeholder.
+  Copy failures restore previous state and reports, including an empty reports directory.
+- Blender selection tests confirm that T3_Transform_Converter.py supports multiple
+  selected pose bones without relying on the removed Bone.select attribute.
+- One-frame TXT tests confirm that F0-to-F0 sections import their absolute pose values
+  as frame-0 keyframes while incomplete multi-frame sections remain invalid.
+- X-mirror tests confirm that exported location X and quaternion Y/Z signs are mirrored,
+  source pose values remain unchanged, and applying the mirror twice restores the original.
+- Compatibility coverage confirms that TXT files generated under the previous add-on name
+  still parse and apply correctly after the internal T3 Transform Converter rename.
+- Duplicate-file regression coverage confirms that the enabled mod highest in the visible
+  load order wins while load_order.json preserves that top-to-bottom order.
+- Enabled root-level runtime_patch.py generators run with --write and produce a validated
+  executable.json before compilation; disabled generators are not executed.
+- A failing runtime generator stops before the previous Mods.Cod and T3_Modded.exe are
+  staged, and both previous outputs remain byte-for-byte untouched.
+- Per-patch target normalization accepts Ai.Dll while preserving T3.exe as the default.
+- A failed multi-binary build restores the previous A2.Dll together with Mods.Cod and
+  T3_Modded.exe.
+- A real WM20_DUAL build generated A2.Dll from the pristine Ai.Dll, redirected only
+  T3_Modded.exe to A2.Dll, and left both original binaries unchanged.
+- A real WM20_DUAL build began with runtime_patch.py newer than executable.json; version
+  0.6.1.2 regenerated the manifest automatically, and the source, manifest, and 64-byte
+  FPS matrix written to T3_Modded.exe matched exactly.
+- A real 32-bit T3.exe from the supplied game archive was used for loader/patch testing.
+- A mod containing only patches/executable.json was discovered with zero files and one EXE patch.
+- The build created a valid empty ZIP-compatible Mods.Cod for the executable-only mod.
+- T3_Modded.exe was rebuilt from the pristine original T3.exe.
+- The common loader injects modtools_data/Mods.Cod before Language.cod, Patch116.Cod, and Game.Cod.
+- A unique AOB signature in the .data section was found exactly once and safely applied.
+- loader_manifest.json recorded the executable patch ID, mod ID, file offset, and size.
+- The original T3.exe SHA-256 remained unchanged after the complete build.
+- Two incompatible writes to the same executable byte were detected as a conflict.
+- When the conflicting build failed, the previously valid Mods.Cod and T3_Modded.exe pair was restored.
+- Settings support the new T3-ModTools location while retaining migration from the former T3 Asset Tool path.
+
+PRE-HOTFIX INSTALLATION MIGRATION (FAULTY EXECUTABLE)
+----------------------------------------------------
+
+The following records the earlier migration, before the user-reported crash was diagnosed.
+The generated executable fingerprint below identifies the faulty pre-hotfix output, not
+the corrected release. Preserving mod patch bytes did not preserve every live game value.
+
+- Existing load_order.json, .compiled/, and Mods.Cod were moved from T3/mods/ to
+  T3/modtools_data/. The old locations were removed only after retaining recoverable copies.
+- The 819-byte load_order.json was preserved exactly, including every enabled flag and
+  entry's order. No project discovery or mod build was run as part of this verification.
+- The 226-file Mods.Cod archive retained its exact SHA-256:
+  6dc20c7e802d33fd1d33ea73d376bfe60f5773d4f93d670fbe976be53eaad583
+- Only the generated executable's loader data payload changed from the old archive path
+  to modtools_data/Mods.Cod; all existing mod patch bytes were preserved.
+- The faulty migrated T3_Modded.exe SHA-256 was:
+  e79eeb277ece95dbed99657237612752e3fe2c5672f6018828a60c9601d76a6d
+- Original T3.exe, Ai.Dll, Game.cod, and Patch116.Cod remained unchanged. The previously
+  generated A2.Dll also remained unchanged.
+- Exact previous data, the replaced generated executable, and manifests were retained in:
+  T3/modtools_data/legacy_backup/3eba28a5963740bfa048a38a5b5475f5/
+- The game was not launched during this migration check.
+
+REAL T3.EXE USED BY THE TEST
+----------------------------
+
+SHA-256:
+52f68d5df4912aba662f0371a06ae0b1ec447ef4b7338460224b20904eb0f061
+
+LIMITATIONS
+-----------
+
+- Launching the Windows game executable is outside the automated test suite.
+- The version 1 executable patch format supports aob_replace and aob_write for T3.exe and Ai.Dll.
+- Mod packs freeze generated executable patches; future source changes require a new pack.
+- Generate mod pack preserves asset text and existing patch descriptions; it does not translate
+  third-party documentation or bundle development scripts outside files/.
+- Console localization does not rewrite third-party prose, file paths, IDs, hashes, or
+  technical exception data; raw details remain available in diagnostic files.
+- Runtime patch generators execute local Python code and must only be used from trusted mods.
