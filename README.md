@@ -7,7 +7,7 @@
 
 # T3-ModTools
 
-**Version 0.6.1**  
+**Version 0.6.12**  
 Experimental asset extraction, conversion, and mod management tool for **Terminator 3: War of the Machines (PC)**.
 <br>
 $\color{yellow}\textsf{Note: Mods that modify the Modded Launcher will cause the game to crash the first time the modifying mod is compiled.}$
