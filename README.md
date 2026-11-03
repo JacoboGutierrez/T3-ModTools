@@ -56,7 +56,7 @@ The source code is distributed under the MIT License. This license applies to T3
 
 # Español
 
-**Versión 0.6.1**  
+**Versión 0.6.12**  
 Herramienta experimental de extracción, conversión y gestión de mods para **Terminator 3: War of the Machines (PC)**.
 <br>
 $\color{yellow}\textsf{Tener en cuenta: Los mods que modifican el Modded Launcher hacen que el juego tenga un crash la primera vez}$
