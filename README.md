@@ -10,9 +10,8 @@
 **Version 0.6.12**  
 Experimental asset extraction, conversion, and mod management tool for **Terminator 3: War of the Machines (PC)**.
 <br>
-$\color{yellow}\textsf{Note:The first time you launch the game after patching the executable, it will crash and automatically restart.
-$\color{yellow}\textsf{This is expected behavior and will only happen once, unless you install or modify another mod that patches the game's engine.
-
+$\color{yellow}\textsf{Note:The first time you launch the game after patching the executable, it will crash and automatically restart.}$
+$\color{yellow}\textsf{This is expected behavior and will only happen once, unless you install or modify another mod that patches the game's engine.}$
 
 <br>
 [Español](#español)
