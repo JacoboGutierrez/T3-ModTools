@@ -10,7 +10,7 @@
 **Version 0.6.12**  
 Experimental asset extraction, conversion, and mod management tool for **Terminator 3: War of the Machines (PC)**.
 <br>
-$\color{yellow}\textsf{Note:The first time you launch the game after patching the executable, it will crash and automatically restart.}$
+$\color{yellow}\textsf{Note: The first time you launch the game after patching the executable, it will crash and automatically restart.}$
 $\color{yellow}\textsf{This is expected behavior and will only happen once, unless you install or modify a mod that patches the game's engine.}$
 
 <br>
@@ -59,7 +59,7 @@ The source code is distributed under the MIT License. This license applies to T3
 **Versión 0.6.12**  
 Herramienta experimental de extracción, conversión y gestión de mods para **Terminator 3: War of the Machines (PC)**.
 <br>
-$\color{yellow}\textsf{Note:La primera vez que ejecutes el juego después de parchear el ejecutable, el juego crasheará y automaticamente se reiniciará.}$
+$\color{yellow}\textsf{Nota: La primera vez que ejecutes el juego después de parchear el ejecutable, el juego crasheará y automaticamente se reiniciará.}$
 $\color{yellow}\textsf{Este comportamiento es esperado y solo pasará una vez, a menos que instales o modifiques un mod que parchee el motor del juego.}$
 <br>
 
